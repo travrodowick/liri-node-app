@@ -31,7 +31,7 @@ function GetUserInput(cmd, userInput) {
 //-------------------------------------------movie-----------------------------------
 function movieInfo(userInput) {
   var movieUrl = "http://www.omdbapi.com/?t=" + userInput + "&apikey=trilogy";
-  if (movieUrl === undefined) {
+  if (!movieUrl) {
     userInput = "mr nobody";
   }
   axios.get(movieUrl).then(function(error, response, body) {
@@ -41,9 +41,13 @@ function movieInfo(userInput) {
       var movieData =
         "\n ********MOVIE INFO*******" +
         "\n The movie's title is: " +
-        response.data.title +
+        response.data.Title +
+        "\n Year:  " +
+        response.data.Year +
         "\n rating:  " +
-        response.data.rating;
+        response.data.imdbRating +
+        "\n Rotten Tomatoes:  " +
+        response.data.Ratings[1].Value("\n ************************");
 
       console.log(movieData);
     }
@@ -53,29 +57,33 @@ function movieInfo(userInput) {
 //--------------------------------concert-----------------------------------------------
 
 function concertInfo(userInput) {
-  if (userInput === undefined) {
-    userInput = "Devo";
-  }
-  axios
-    .get(
-      "https://rest.bandsintown.com/artists/" +
-        userInput +
-        "/events?app_id=codingbootcamp"
-    )
-    .then(function(response) {
-      for (var i = 0; i < response.data.length; i++) {
-        var concertDate = response.data[i].datetime;
-        console.log("concert date:  ", concertDate);
-        var dateSplit = concertDate.split("T");
+  if (!userInput) {
+    console.log("please enter an artist");
+  } else {
+    axios
+      .get(
+        "https://rest.bandsintown.com/artists/" +
+          userInput +
+          "/events?app_id=codingbootcamp"
+      )
+      .then(function(response) {
+        for (var i = 0; i < response.data.length; i++) {
+          var concertDate = response.data[i].datetime;
+          var formattedDate = moment(concertDate).format("MM-DD-YYYY");
 
-        var concertData =
-          "\nWhere: " +
-          response.data[i].venue.city +
-          "\nWhen: " +
-          moment(concertDate[0], "MM-DD-YYYY");
-        console.log(concertData);
-      }
-    });
+          var concertData =
+            "\n------------------------------------------" +
+            "\nVenue:  " +
+            response.data[i].venue.name +
+            "\nWhere: " +
+            response.data[i].venue.city +
+            "\nWhen: " +
+            formattedDate;
+          ("\n------------------------------------------");
+          console.log(concertData);
+        }
+      });
+  }
 }
 
 //-----------------------------------song info-------------------------------------------
@@ -84,20 +92,20 @@ function songInfo() {
   console.log("spotify running");
 }
 
-//----------------------------------error----------------------------------------------------
+//----------------------------------error handling--------------------------------------------
 
-function errHandling(error) {
-  if (error.response) {
-    console.log("---------------Data---------------");
-    console.log(error.response.data);
-    console.log("---------------Status---------------");
-    console.log(error.response.status);
-    console.log("---------------Status---------------");
-    console.log(error.response.headers);
-  } else if (error.request) {
-    console.log(error.request);
-  } else {
-    console.log("Error", error.message);
-  }
-  console.log(error.config);
-}
+// function errHandling(error) {
+//   if (error.response) {
+//     console.log("---------------Data---------------");
+//     console.log(error.response.data);
+//     console.log("---------------Status---------------");
+//     console.log(error.response.status);
+//     console.log("---------------Status---------------");
+//     console.log(error.response.headers);
+//   } else if (error.request) {
+//     console.log(error.request);
+//   } else {
+//     console.log("Error", error.message);
+//   }
+//   console.log(error.config);
+// }
