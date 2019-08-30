@@ -2,17 +2,17 @@
 require("dotenv").config();
 var keys = require("./keys.js");
 var axios = require("axios");
-// var spotify = new Spotify(keys.spotify);
 var fs = require("fs");
 var Spotify = require("node-spotify-api");
 var request = require("request");
 var moment = require("moment");
+var spotify = new Spotify(keys.spotify);
 moment().format();
 
 //----------------------get the command line input---------------------------
 var cmd = process.argv[2];
 var userInput = process.argv.splice(3).join(" ");
-
+//call get user input to get user input
 GetUserInput(cmd, userInput);
 
 function GetUserInput(cmd, userInput) {
@@ -26,18 +26,20 @@ function GetUserInput(cmd, userInput) {
     case "spotify-this-song":
       songInfo(userInput);
       break;
+    case "do-what-it-says":
+      itSays();
+      break;
   }
 }
 //-------------------------------------------movie-----------------------------------
 function movieInfo(userInput) {
   var movieUrl = "http://www.omdbapi.com/?t=" + userInput + "&apikey=trilogy";
   if (!movieUrl) {
-    userInput = "mr nobody";
-  }
-  axios.get(movieUrl).then(function(error, response, body) {
-    if (error) {
-      errHandling(error);
-    } else {
+    userInput = "my nobody";
+    console.log("no user input");
+  } else {
+    axios.get(movieUrl).then(function(response) {
+      console.log("taking movie input");
       var movieData =
         "\n ********MOVIE INFO*******" +
         "\n The movie's title is: " +
@@ -47,11 +49,11 @@ function movieInfo(userInput) {
         "\n rating:  " +
         response.data.imdbRating +
         "\n Rotten Tomatoes:  " +
-        response.data.Ratings[1].Value("\n ************************");
-
+        response.data.Ratings[1].Value +
+        "\n ************************";
       console.log(movieData);
-    }
-  });
+    });
+  }
 }
 
 //--------------------------------concert-----------------------------------------------
@@ -70,16 +72,16 @@ function concertInfo(userInput) {
         for (var i = 0; i < response.data.length; i++) {
           var concertDate = response.data[i].datetime;
           var formattedDate = moment(concertDate).format("MM-DD-YYYY");
-
           var concertData =
+            "\n *****************************************" +
             "\n------------------------------------------" +
             "\nVenue:  " +
             response.data[i].venue.name +
             "\nWhere: " +
             response.data[i].venue.city +
             "\nWhen: " +
-            formattedDate;
-          ("\n------------------------------------------");
+            formattedDate +
+            "\n------------------------------------------";
           console.log(concertData);
         }
       });
@@ -88,24 +90,33 @@ function concertInfo(userInput) {
 
 //-----------------------------------song info-------------------------------------------
 
-function songInfo() {
-  console.log("spotify running");
+function songInfo(userInput) {
+  if (!userInput) {
+    userInput = "the sign";
+  } else {
+    spotify.search({ type: "track", query: userInput }, function(err, data) {
+      if (err) {
+        return console.log("Error occurred: " + err);
+      }
+      for (var i = 0; i < data.tracks.items.length; i++) {
+        console.log("************************");
+        console.log("artist:  ", data.tracks.items[i].album.artists[0].name);
+        console.log("song name:  ", data.tracks.items[i].name);
+        console.log("album:  ", data.tracks.items[i].album.name);
+        console.log(
+          "preview URL:  ",
+          data.tracks.items[i].album.external_urls.spotify
+        );
+      }
+    });
+  }
 }
+//-------------------------------do what it says-------------------------------
 
-//----------------------------------error handling--------------------------------------------
-
-// function errHandling(error) {
-//   if (error.response) {
-//     console.log("---------------Data---------------");
-//     console.log(error.response.data);
-//     console.log("---------------Status---------------");
-//     console.log(error.response.status);
-//     console.log("---------------Status---------------");
-//     console.log(error.response.headers);
-//   } else if (error.request) {
-//     console.log(error.request);
-//   } else {
-//     console.log("Error", error.message);
-//   }
-//   console.log(error.config);
-// }
+function itSays(userInput) {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    var song = data.split(",");
+    userInput = song[1];
+    songInfo(userInput);
+  });
+}
