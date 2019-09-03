@@ -73,8 +73,7 @@ function concertInfo(userInput) {
           var concertDate = response.data[i].datetime;
           var formattedDate = moment(concertDate).format("MM-DD-YYYY");
           var concertData =
-            "\n *****************************************" +
-            "\n------------------------------------------" +
+            "\n----------show--------------" +
             "\nVenue:  " +
             response.data[i].venue.name +
             "\nWhere: " +
