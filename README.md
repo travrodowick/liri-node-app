@@ -24,9 +24,9 @@ After navigating to the file in your terminal use "node liri.js **\_\_\_**(searc
 
   **For example a typical search might look like this:**
 
-  > node liri.js concert-this lumineers
-  > node liri.js movie-this casablanca
-  > node liri.js spotify-this-song light my fire
+  > - node liri.js concert-this lumineers
+  > - node liri.js movie-this casablanca
+  > - node liri.js spotify-this-song light my fire
 
 ### concert-this:
 
