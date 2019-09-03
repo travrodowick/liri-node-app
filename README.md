@@ -32,25 +32,25 @@ After navigating to the file in your terminal use "node liri.js **\_\_\_**(searc
 
 takes in user input of artist or band name and returns venues, locations and the date of an event -- powered by BandsInTown
 
-[Imgur](https://i.imgur.com/NSYQ1me.png)
+![concert-this](https://i.imgur.com/NSYQ1me.png)
 
 #### movie-this:
 
 takes in user input of a movie or film and returns the year released, its rating and a Rotten Tomatoes score -- powered by OMDB
 
-[Imgur](https://i.imgur.com/U5YoZvy.png)
+![movie-this](https://i.imgur.com/U5YoZvy.png)
 
 #### spotify-this-song:
 
 takes in user input of a song and returns the artist/band, album, and a preview link -- powered by Spotify
 
-[Imgur](https://i.imgur.com/mjpslrw.png)
+![spotify-this-song](https://i.imgur.com/mjpslrw.png)
 
 ### do-what-it-says:
 
 random function takes in no input and gives you the resulting search from a text file
 
-[Imgur](https://i.imgur.com/Ol8h1V4.png)
+![so-what-it-says](https://i.imgur.com/Ol8h1V4.png)
 
 ## Tech Used
 
